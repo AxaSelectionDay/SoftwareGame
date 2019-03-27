@@ -1,0 +1,360 @@
+swagger: '2.0'
+info:
+  version: 1.0.0.0
+  title: Software Game API - 1.0.0.0
+  termsOfService: Terms of service
+  contact:
+    name: Antonin Jousson
+    email: antonin.jousson@axa.be
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: ba-publisher-controller
+    description: BA Publisher Controller
+  - name: team-controller
+    description: Team Controller
+  - name: crazy-controller
+    description: Crazy Controller
+  - name: oracle-controller
+    description: Oracle Controller
+paths:
+  '/api/oracle/requirement/{uuid}':
+    get:
+      tags:
+        - oracle-controller
+      summary: getRequirementChange
+      operationId: getRequirementChangeUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RequirementChange'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/api/publish/answers/{uuid}':
+    post:
+      tags:
+        - ba-publisher-controller
+      summary: submitAnswers
+      operationId: submitAnswersUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid
+          required: true
+          type: string
+        - in: body
+          name: businessAnalystAnswers
+          description: businessAnalystAnswers
+          required: true
+          schema:
+            $ref: '#/definitions/BusinessAnalystAnswers'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/BusinessAnalystAnswers'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /api/teams:
+    post:
+      tags:
+        - team-controller
+      summary: createTeam
+      operationId: createTeamUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: team
+          description: team
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        '201':
+          description: Created
+          schema:
+            $ref: '#/definitions/Team'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/api/teams/{uuid}':
+    get:
+      tags:
+        - team-controller
+      summary: getTeamById
+      operationId: getTeamByIdUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Team'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - team-controller
+      summary: updateTeam
+      operationId: updateTeamUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid
+          required: true
+          type: string
+        - in: body
+          name: teamDetails
+          description: teamDetails
+          required: true
+          schema:
+            $ref: '#/definitions/Team'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Team'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  '/api/token/{uuid}':
+    get:
+      tags:
+        - crazy-controller
+      summary: getToken
+      operationId: getTokenUsingGET
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: uuid
+          in: path
+          description: uuid
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              type: string
+              format: byte
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+definitions:
+  RequirementChange:
+    type: object
+    properties:
+      answerA:
+        type: string
+      answerB:
+        type: string
+      answerC:
+        type: string
+      answerD:
+        type: string
+      question:
+        type: string
+      questionNumber:
+        type: integer
+        format: int32
+  Team:
+    type: object
+    properties:
+      clientIpAddress:
+        type: string
+      createdAt:
+        type: string
+        format: date-time
+      currentStage:
+        type: string
+        enum:
+          - STAGE_1
+          - STAGE_2
+          - STAGE_3
+          - STAGE_4
+          - STAGE_5
+          - STAGE_6
+      id:
+        type: integer
+        format: int64
+      port:
+        type: integer
+        format: int32
+      stage2:
+        type: boolean
+      stage3:
+        type: boolean
+      stage4:
+        type: boolean
+      stage4Question1:
+        type: boolean
+      stage4Question2:
+        type: boolean
+      stage4Question3:
+        type: boolean
+      stage5:
+        type: boolean
+      teamMemberFiveName:
+        type: string
+      teamMemberFiveRole:
+        type: string
+      teamMemberFourName:
+        type: string
+      teamMemberFourRole:
+        type: string
+      teamMemberOneName:
+        type: string
+      teamMemberOneRole:
+        type: string
+      teamMemberThreeName:
+        type: string
+      teamMemberThreeRole:
+        type: string
+      teamMemberTwoName:
+        type: string
+      teamMemberTwoRole:
+        type: string
+      teamName:
+        type: string
+      teamUUID:
+        type: string
+      updatedAt:
+        type: string
+        format: date-time
+  BusinessAnalystAnswers:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      question10Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question1Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question2Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question3Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question4Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question5Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question6Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question7Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question8Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      question9Answer:
+        type: string
+        enum:
+          - A
+          - B
+          - C
+          - D
+      teamUUID:
+        type: string
